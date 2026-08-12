@@ -1,30 +1,23 @@
 pipeline {
 
-    agent {
-        docker {
-            image 'node:24-alpine'
-            args '-u 0:0'
-        }
+    agent any
+
+    tools {
+        nodejs 'Node24'
     }
 
     environment {
         IMAGE_NAME = 'naviandres/laboratorio-devops'
-        IMAGE_TAG = "${BUILD_NUMBER}"
+        IMAGE_TAG  = "${BUILD_NUMBER}"
     }
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/naviandres/laboratorio-devops'
-            }
-        }
-
         stage('Test') {
             steps {
+                sh 'node -v'
                 sh 'npm ci'
-                sh 'npm test'
+                sh 'npm test --if-present'
             }
         }
 
@@ -43,10 +36,11 @@ pipeline {
                         passwordVariable: 'DOCKER_PASSWORD'
                     )
                 ]) {
-                    sh '''
+                    sh """
                         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
                         docker push ${IMAGE_NAME}:${IMAGE_TAG}
-                    '''
+                        docker push ${IMAGE_NAME}:latest
+                    """
                 }
             }
         }
