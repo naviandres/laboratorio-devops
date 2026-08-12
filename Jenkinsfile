@@ -1,6 +1,11 @@
 pipeline {
 
-    agent any
+    agent {
+        docker {
+            image 'node:24-alpine'
+            args '-u 0:0'
+        }
+    }
 
     environment {
         IMAGE_NAME = 'naviandres/laboratorio-devops'
