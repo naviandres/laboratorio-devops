@@ -23,7 +23,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -t ${IMAGE_NAME}:latest ."
             }
         }
 
@@ -36,11 +36,11 @@ pipeline {
                         passwordVariable: 'DOCKER_PASSWORD'
                     )
                 ]) {
-                    sh """
+                    sh '''
                         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
                         docker push ${IMAGE_NAME}:${IMAGE_TAG}
                         docker push ${IMAGE_NAME}:latest
-                    """
+                    '''
                 }
             }
         }
