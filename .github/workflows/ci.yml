@@ -29,3 +29,8 @@ jobs:
 
       - name: Ejecutar pruebas automatizadas
         run: npm test
+
+      # Análisis estático opcional (mejora C1 de la rúbrica): ESLint valida
+      # estilo y errores de código sin ejecutarlo; complementa la suite de tests.
+      - name: Análisis estático con ESLint
+        run: npm run lint
