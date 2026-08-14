@@ -1,0 +1,39 @@
+# 1. DEPLOYMENT: Define cómo correr contenedor
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: intellillent-deployment
+  labels:
+    app: intellillent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: intellillent
+  template:
+    metadata:
+      labels:
+        app: intellillent
+    spec:
+      containers:
+      - name: intellillent-container
+        image: intellillent:local
+        imagePullPolicy: IfNotPresent # Le dice a k8s que use la imagen local, no la busque en internet
+        ports:
+        - containerPort: 3000
+
+---
+# 2. SERVICE: Expone aplicación al exterior
+apiVersion: v1
+kind: Service
+metadata:
+  name: intellillent-service
+spec:
+  type: NodePort
+  selector:
+    app: intellillent # Se conecta con los labels del Deployment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000 # El puerto de app Express
+      nodePort: 30000  # El puerto por donde entrará desde el navegador
