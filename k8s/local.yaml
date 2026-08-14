@@ -1,4 +1,4 @@
-# 1. DEPLOYMENT: Define cómo correr tu contenedor
+# 1. DEPLOYMENT: Define cómo correr contenedor
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,7 +23,7 @@ spec:
         - containerPort: 3000
 
 ---
-# 2. SERVICE: Expone tu aplicación al exterior
+# 2. SERVICE: Expone aplicación al exterior
 apiVersion: v1
 kind: Service
 metadata:
@@ -35,5 +35,5 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 3000 # El puerto de tu app Express
-      nodePort: 30000  # El puerto por donde entrarás desde tu navegador
+      targetPort: 3000 # El puerto de app Express
+      nodePort: 30000  # El puerto por donde entrará desde el navegador
